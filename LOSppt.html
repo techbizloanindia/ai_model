@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management System - SOP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .presentation-container {
+            width: 95%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            margin: -60px -60px 40px -60px;
+            text-align: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+            padding-left: 20px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            color: #34495e;
+            margin: 25px 0 15px 0;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .module-card:hover::before {
+            left: 100%;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .module-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .process-steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: #e3f2fd;
+            transform: translateX(10px);
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -20px;
+            top: 15px;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .step h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            display: flex;
+            gap: 8px;
+            margin: 0 20px;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator-dot.active {
+            background: #3498db;
+            transform: scale(1.2);
+        }
+
+        .feature-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border: 1px solid #c3e6cb;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <div class="slide-header">
+                <div class="slide-number">1/8</div>
+                <h1>Financial Management System</h1>
+                <p style="font-size: 1.2em; margin-top: 15px;">Standard Operating Procedures (SOP)</p>
+                <p style="font-size: 1em; margin-top: 10px; opacity: 0.9;">Comprehensive Guide to System Navigation and Operations</p>
+            </div>
+            <div style="text-align: center; margin-top: 60px;">
+                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 20px; padding: 40px; margin: 20px 0;">
+                    <h2 style="color: #2c3e50; border: none; padding: 0;">System Overview</h2>
+                    <p style="font-size: 1.1em; color: #5a6c7d; margin-top: 20px; line-height: 1.6;">
+                        This presentation provides a detailed analysis of the Financial Management System interface
+                        and comprehensive standard operating procedures for efficient system utilization.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: System Analysis -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">2/8</div>
+                <h1>System Interface Analysis</h1>
+            </div>
+            <h2>Module Identification & Structure</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-icon">💰</div>
+                    <h3>Fee Collection</h3>
+                    <p>Payment processing and fee management</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🏦</div>
+                    <h3>Basis For Loan</h3>
+                    <p>Loan eligibility and criteria management</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">👥</div>
+                    <h3>Customers</h3>
+                    <p>Client database and relationship management</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📊</div>
+                    <h3>Assets Financed</h3>
+                    <p>Financed asset tracking and management</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">💳</div>
+                    <h3>Financial Details</h3>
+                    <p>Comprehensive financial information</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🧾</div>
+                    <h3>Charges</h3>
+                    <p>Fee structure and billing management</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Additional Modules -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">3/8</div>
+                <h1>Extended Module Analysis</h1>
+            </div>
+            <h2>Secondary Function Modules</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-icon">🏗️</div>
+                    <h3>Inst. Structure</h3>
+                    <p>Institutional structure management</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📋</div>
+                    <h3>Instruments</h3>
+                    <p>Financial instruments tracking</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🏢</div>
+                    <h3>Bureau</h3>
+                    <p>Credit bureau integration</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📈</div>
+                    <h3>TVR</h3>
+                    <p>Total Value Realization</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🏪</div>
+                    <h3>BranchPD</h3>
+                    <p>Branch performance dashboard</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">💯</div>
+                    <h3>CreditPD</h3>
+                    <p>Credit performance dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Navigation SOP -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">4/8</div>
+                <h1>Navigation Standard Operating Procedures</h1>
+            </div>
+            <h2>System Access & Navigation Protocol</h2>
+            <div class="process-steps">
+                <div class="step">
+                    <h4>System Login</h4>
+                    <p>Access the financial management system using authorized credentials. Ensure secure connection and proper authentication before proceeding.</p>
+                </div>
+                <div class="step">
+                    <h4>Dashboard Overview</h4>
+                    <p>Upon login, review the main dashboard containing all available modules. Familiarize yourself with the layout and available options.</p>
+                </div>
+                <div class="step">
+                    <h4>Module Selection</h4>
+                    <p>Click on the appropriate module tab based on your current task requirements. Each module is clearly labeled for easy identification.</p>
+                </div>
+                <div class="step">
+                    <h4>Function Execution</h4>
+                    <p>Within each module, follow the specific workflows and procedures outlined for that particular function area.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Core Operations SOP -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">5/8</div>
+                <h1>Core Operations Procedures</h1>
+            </div>
+            <h2>Primary Module Operations</h2>
+            
+            <h3>Fee Collection Module SOP</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">1</div>
+                    <div>
+                        <strong>Payment Processing:</strong> Access customer accounts, verify payment details, and process transactions according to established protocols.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">2</div>
+                    <div>
+                        <strong>Receipt Generation:</strong> Generate and distribute payment receipts, ensuring proper documentation and record keeping.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">3</div>
+                    <div>
+                        <strong>Reconciliation:</strong> Perform daily reconciliation of collected fees with system records and bank statements.
+                    </div>
+                </div>
+            </div>
+
+            <h3>Customer Management SOP</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">📝</div>
+                    <div>
+                        <strong>Customer Onboarding:</strong> Complete customer registration, KYC verification, and documentation.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div>
+                        <strong>Profile Updates:</strong> Maintain current customer information and update records as required.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Best Practices -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">6/8</div>
+                <h1>Best Practices & Guidelines</h1>
+            </div>
+            <h2>System Usage Best Practices</h2>
+            
+            <div class="best-practices">
+                <h3>🔒 Security Protocols</h3>
+                <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                    <li>Always log out after completing work sessions</li>
+                    <li>Use strong passwords and change them regularly</li>
+                    <li>Never share login credentials with unauthorized personnel</li>
+                    <li>Report any suspicious system activity immediately</li>
+                </ul>
+            </div>
+
+            <div class="best-practices">
+                <h3>📋 Data Management</h3>
+                <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                    <li>Verify all data entries before submission</li>
+                    <li>Maintain regular backup procedures</li>
+                    <li>Follow data retention policies</li>
+                    <li>Ensure compliance with privacy regulations</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Important Considerations</h3>
+                <p style="margin: 10px 0; line-height: 1.6;">
+                    Always double-check financial transactions and maintain audit trails. 
+                    Any discrepancies should be reported immediately to the system administrator.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Workflow Integration -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">7/8</div>
+                <h1>Workflow Integration</h1>
+            </div>
+            <h2>Inter-Module Workflow Procedures</h2>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <h4>Customer-to-Loan Workflow</h4>
+                    <p>Navigate from Customer module → Basis For Loan → Assets Financed to complete loan processing workflow efficiently.</p>
+                </div>
+                <div class="step">
+                    <h4>Financial Analysis Workflow</h4>
+                    <p>Use Financial Details → Charges → TVR modules in sequence for comprehensive financial analysis and reporting.</p>
+                </div>
+                <div class="step">
+                    <h4>Performance Monitoring</h4>
+                    <p>Utilize BranchPD → CreditPD → Bureau modules for performance tracking and credit risk assessment.</p>
+                </div>
+                <div class="step">
+                    <h4>Documentation Workflow</h4>
+                    <p>Access Documents → Statements → Financial Analysis for complete documentation and reporting procedures.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Summary -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">8/8</div>
+                <h1>Summary & Next Steps</h1>
+            </div>
+            <h2>Key Takeaways</h2>
+            
+            <div style="background: linear-gradient(135deg, #e8f4f8, #dbeafe); border-radius: 20px; padding: 40px; margin: 30px 0;">
+                <h3 style="color: #1e40af; margin-bottom: 20px;">System Capabilities</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; color: #374151;">
+                    The Financial Management System provides comprehensive tools for managing all aspects of financial operations, 
+                    from customer management to loan processing, asset financing, and performance monitoring.
+                </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 20px; padding: 40px; margin: 30px 0;">
+                <h3 style="color: #0369a1; margin-bottom: 20px;">Implementation Steps</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📚</div>
+                        <strong>Training</strong>
+                        <p style="margin-top: 10px; color: #64748b;">Staff training on SOPs</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🔧</div>
+                        <strong>Configuration</strong>
+                        <p style="margin-top: 10px; color: #64748b;">System setup and customization</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
+                        <strong>Monitoring</strong>
+                        <p style="margin-top: 10px; color: #64748b;">Performance tracking and optimization</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()" id="prevBtn">Previous</button>
+        <div class="slide-indicator" id="slideIndicator"></div>
+        <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function initializeSlideshow() {
+            const indicator = document.getElementById('slideIndicator');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'indicator-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(i);
+                indicator.appendChild(dot);
+            }
+            updateNavButtons();
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            
+            const dots = document.querySelectorAll('.indicator-dot');
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[n].classList.add('active');
+            
+            currentSlide = n;
+            updateNavButtons();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Initialize slideshow
+        initializeSlideshow();
+    </script>
+</body>
+</html>

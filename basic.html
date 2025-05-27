@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let, Var & Const Demo</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+            line-height: 1.6;
+        }
+        
+        .container {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        h1, h2 {
+            color: #00ffff;
+            text-align: center;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .code-block {
+            background: #2a2a2a;
+            border-left: 4px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .output {
+            background: #001a00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .error {
+            color: #ff4444;
+            background: #2a0000;
+            border: 1px solid #ff4444;
+        }
+        
+        .success {
+            color: #44ff44;
+        }
+        
+        .warning {
+            color: #ffaa00;
+            background: #2a1a00;
+            border: 1px solid #ffaa00;
+        }
+        
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #00cccc;
+            box-shadow: 0 0 10px #00cccc;
+        }
+        
+        .section {
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 JavaScript: Let, Var & Const Playground</h1>
+        
+        <div class="section">
+            <h2>📋 Quick Reference</h2>
+            <div class="code-block">
+                <strong>var:</strong> Function-scoped, hoisted, can be redeclared<br>
+                <strong>let:</strong> Block-scoped, hoisted but not initialized, cannot be redeclared<br>
+                <strong>const:</strong> Block-scoped, hoisted but not initialized, cannot be redeclared or reassigned
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Interactive Demos</h2>
+            <button onclick="demonstrateScope()">1. Scope Differences</button>
+            <button onclick="demonstrateHoisting()">2. Hoisting Behavior</button>
+            <button onclick="demonstrateReassignment()">3. Reassignment Rules</button>
+            <button onclick="demonstrateRedeclaration()">4. Redeclaration</button>
+            <button onclick="demonstrateLoops()">5. Loop Behavior</button>
+            <button onclick="demonstrateObjects()">6. Const with Objects</button>
+            <button onclick="clearOutput()">Clear Output</button>
+        </div>
+
+        <div id="output" class="output">
+            <div class="success">👆 Click buttons above to see demonstrations!</div>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'normal') {
+            const output = document.getElementById('output');
+            const div = document.createElement('div');
+            
+            if (type === 'error') {
+                div.className = 'error';
+                div.innerHTML = `❌ ${message}`;
+            } else if (type === 'success') {
+                div.className = 'success';
+                div.innerHTML = `✅ ${message}`;
+            } else if (type === 'warning') {
+                div.className = 'warning';
+                div.innerHTML = `⚠️ ${message}`;
+            } else {
+                div.innerHTML = `📝 ${message}`;
+            }
+            
+            output.appendChild(div);
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '<div class="success">Output cleared! 🧹</div>';
+        }
+
+        // 1. Scope Differences
+        function demonstrateScope() {
+            log("=== SCOPE DIFFERENCES ===", 'success');
+            
+            // Function scope vs Block scope
+            function testScope() {
+                if (true) {
+                    var varVariable = "I'm var - function scoped";
+                    let letVariable = "I'm let - block scoped";
+                    const constVariable = "I'm const - block scoped";
+                }
+                
+                try {
+                    log(`var outside block: ${varVariable}`);
+                } catch (e) {
+                    log(`var error: ${e.message}`, 'error');
+                }
+                
+                try {
+                    log(`let outside block: ${letVariable}`);
+                } catch (e) {
+                    log(`let error: ${e.message}`, 'error');
+                }
+                
+                try {
+                    log(`const outside block: ${constVariable}`);
+                } catch (e) {
+                    log(`const error: ${e.message}`, 'error');
+                }
+            }
+            
+            testScope();
+            log("Result: var is accessible outside block, let and const are not", 'warning');
+        }
+
+        // 2. Hoisting Behavior
+        function demonstrateHoisting() {
+            log("=== HOISTING BEHAVIOR ===", 'success');
+            
+            function testHoisting() {
+                log(`var before declaration: ${typeof hoistedVar} = ${hoistedVar}`);
+                
+                try {
+                    log(`let before declaration: ${hoistedLet}`);
+                } catch (e) {
+                    log(`let error: ${e.message}`, 'error');
+                }
+                
+                try {
+                    log(`const before declaration: ${hoistedConst}`);
+                } catch (e) {
+                    log(`const error: ${e.message}`, 'error');
+                }
+                
+                var hoistedVar = "I'm var";
+                let hoistedLet = "I'm let";
+                const hoistedConst = "I'm const";
+                
+                log(`After declarations - var: ${hoistedVar}, let: ${hoistedLet}, const: ${hoistedConst}`);
+            }
+            
+            testHoisting();
+            log("Result: var is hoisted and initialized with undefined, let/const are hoisted but not initialized", 'warning');
+        }
+
+        // 3. Reassignment Rules
+        function demonstrateReassignment() {
+            log("=== REASSIGNMENT RULES ===", 'success');
+            
+            var varValue = "Original var";
+            let letValue = "Original let";
+            const constValue = "Original const";
+            
+            log(`Initial values - var: ${varValue}, let: ${letValue}, const: ${constValue}`);
+            
+            // Reassign var and let
+            varValue = "Modified var";
+            letValue = "Modified let";
+            
+            log(`After reassignment - var: ${varValue}, let: ${letValue}`);
+            
+            // Try to reassign const
+            try {
+                constValue = "Modified const";
+                log(`const after reassignment: ${constValue}`);
+            } catch (e) {
+                log(`const reassignment error: ${e.message}`, 'error');
+            }
+            
+            log("Result: var and let can be reassigned, const cannot", 'warning');
+        }
+
+        // 4. Redeclaration
+        function demonstrateRedeclaration() {
+            log("=== REDECLARATION RULES ===", 'success');
+            
+            // var can be redeclared
+            var redeclareTest = "First var";
+            log(`First var declaration: ${redeclareTest}`);
+            
+            var redeclareTest = "Second var";
+            log(`Second var declaration (redeclared): ${redeclareTest}`, 'success');
+            
+            // let cannot be redeclared in same scope
+            let letTest = "First let";
+            log(`let declaration: ${letTest}`);
+            
+            try {
+                eval('let letTest = "Second let";'); // Using eval to avoid syntax error
+            } catch (e) {
+                log(`let redeclaration error: ${e.message}`, 'error');
+            }
+            
+            // const cannot be redeclared
+            const constTest = "First const";
+            log(`const declaration: ${constTest}`);
+            
+            try {
+                eval('const constTest = "Second const";');
+            } catch (e) {
+                log(`const redeclaration error: ${e.message}`, 'error');
+            }
+            
+            log("Result: Only var can be redeclared in the same scope", 'warning');
+        }
+
+        // 5. Loop Behavior
+        function demonstrateLoops() {
+            log("=== LOOP BEHAVIOR ===", 'success');
+            
+            log("Using var in loop:");
+            for (var i = 0; i < 3; i++) {
+                setTimeout(() => log(`var loop ${i}: ${i}`), 10 * i);
+            }
+            
+            setTimeout(() => {
+                log("Using let in loop:");
+                for (let j = 0; j < 3; j++) {
+                    setTimeout(() => log(`let loop ${j}: ${j}`), 10 * j);
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                log("Result: var shares the same variable across iterations, let creates new binding each iteration", 'warning');
+            }, 200);
+        }
+
+        // 6. Const with Objects
+        function demonstrateObjects() {
+            log("=== CONST WITH OBJECTS ===", 'success');
+            
+            const constObject = { name: "John", age: 30 };
+            const constArray = [1, 2, 3];
+            
+            log(`Original object: ${JSON.stringify(constObject)}`);
+            log(`Original array: ${JSON.stringify(constArray)}`);
+            
+            // Modify object properties
+            constObject.name = "Jane";
+            constObject.city = "New York";
+            
+            // Modify array elements
+            constArray.push(4);
+            constArray[0] = 10;
+            
+            log(`Modified object: ${JSON.stringify(constObject)}`, 'success');
+            log(`Modified array: ${JSON.stringify(constArray)}`, 'success');
+            
+            // Try to reassign the const
+            try {
+                constObject = { name: "Bob" };
+            } catch (e) {
+                log(`Object reassignment error: ${e.message}`, 'error');
+            }
+            
+            try {
+                constArray = [5, 6, 7];
+            } catch (e) {
+                log(`Array reassignment error: ${e.message}`, 'error');
+            }
+            
+            log("Result: const objects/arrays can be modified but not reassigned", 'warning');
+        }
+
+        // Additional Examples
+        function runAllExamples() {
+            log("=== COMPREHENSIVE EXAMPLES ===", 'success');
+            
+            // Example 1: Counter with different declarations
+            log("Counter Examples:");
+            
+            function createCounters() {
+                var counters = [];
+                
+                // Using var (problematic)
+                for (var i = 0; i < 3; i++) {
+                    counters.push(function() {
+                        return `var counter: ${i}`;
+                    });
+                }
+                
+                // Using let (correct)
+                for (let j = 0; j < 3; j++) {
+                    counters.push(function() {
+                        return `let counter: ${j}`;
+                    });
+                }
+                
+                return counters;
+            }
+            
+            const allCounters = createCounters();
+            allCounters.forEach((counter, index) => {
+                log(`Counter ${index}: ${counter()}`);
+            });
+        }
+
+        // Initialize with welcome message
+        window.onload = function() {
+            log("Welcome to the Let, Var & Const Playground! 🎮", 'success');
+            log("Click the buttons above to explore different concepts.", 'warning');
+            log("Each demo shows practical differences between these declaration types.", 'warning');
+        };
+    </script>
+</body>
+</html>
